@@ -3,9 +3,9 @@ require '../libraries/class'
 
 Ball = class()
 
-function Ball:init(WINDOW_WIDTH, WINDOW_HEIGHT)
-    self.BALL_START_X = WINDOW_WIDTH / 2 - 2
-    self.BALL_START_Y = WINDOW_HEIGHT / 2 - 2
+function Ball:init(windowWidth, windowHeight)
+    self.BALL_START_X = windowWidth / 2 - 2
+    self.BALL_START_Y = windowHeight / 2 - 2
 
     self.ballX = self.BALL_START_X
     self.ballY = self.BALL_START_Y

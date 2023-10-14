@@ -8,7 +8,7 @@ function GameBoard:init(WINDOW_WIDTH, WINDOW_HEIGHT)
     love.graphics.setDefaultFilter("nearest","nearest")
     math.randomseed(os.time())
 
-    self.SMALL_FONT = love.graphics.newFont(16, "mono")
+    self.SMALL_FONT = love.graphics.newFont(8, "mono")
     self.SCORE_FONT = love.graphics.newFont(32, "mono")
 
     love.graphics.setFont(self.SMALL_FONT)
