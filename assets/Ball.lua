@@ -51,9 +51,16 @@ function Ball:collides(paddle)
         return false
     end
 
+    if self.Dx > 0 then
+        self.x = paddle.x - self.WIDTH
+    else
+        self.x = paddle.x + paddle.width
+    end
+
     return true
 end
 
-function Ball:invertXDirection()
+function Ball:invertDirection()
     self.Dx = self.Dx * -1.10
+    self.Dy = self.Dy < 0 and -math.random(10, 150) or math.random(10, 150)
 end
