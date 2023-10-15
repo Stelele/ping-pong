@@ -47,10 +47,8 @@ function GameBoard:update(dt)
     self.player2:update(dt)
 
     if self.gameState == 'play' then
-        if self.gameBall:collides(self.player1) then
-            self.gameBall:invertXDirection(self.player1)
-        elseif  self.gameBall:collides(self.player2) then
-            self.gameBall:invertXDirection(self.player2)
+        if self.gameBall:collides(self.player1) or self.gameBall:collides(self.player2) then
+            self.gameBall:invertXDirection()
         end
         self.gameBall:update(dt) 
     end

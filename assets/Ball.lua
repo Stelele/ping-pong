@@ -54,6 +54,6 @@ function Ball:collides(paddle)
     return true
 end
 
-function Ball:invertXDirection(paddle)
+function Ball:invertXDirection()
     self.Dx = self.Dx * -1.10
 end
