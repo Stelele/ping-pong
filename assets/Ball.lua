@@ -3,7 +3,7 @@ require '../libraries/class'
 
 Ball = class()
 
-function Ball:init(windowWidth, windowHeight)
+function Ball:init(windowWidth, windowHeight, startDirection)
     self.WINDOW_WIDTH = windowWidth
     self.WINDOW_HEIGHT = windowHeight
 
@@ -16,7 +16,7 @@ function Ball:init(windowWidth, windowHeight)
     self.x = self.START_X
     self.y = self.START_Y
 
-    self.Dx = math.random(2) == 1 and 100 or -100
+    self.Dx = startDirection == 1 and 100 or -100
     self.Dy = math.random(-50, 50) * 1.5
 end
 
@@ -63,4 +63,12 @@ end
 function Ball:invertDirection()
     self.Dx = self.Dx * -1.10
     self.Dy = self.Dy < 0 and -math.random(10, 150) or math.random(10, 150)
+end
+
+function Ball:setDirection(direction)
+    if direction == 1 then
+        self.Dx = self.Dx > 0 and self.Dx or -self.Dx
+    elseif direction == 2 then
+        self.Dx = self.Dx > 0 and -self.Dx or self.Dx
+    end
 end
