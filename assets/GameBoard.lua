@@ -19,11 +19,18 @@ function GameBoard:init(WINDOW_WIDTH, WINDOW_HEIGHT)
     self.player1Score = 0
     self.player2Score = 0
 
+    self.winingPlayer = nil
+
     self.player1 = Paddle(WINDOW_WIDTH, WINDOW_HEIGHT, 10, 30, 5, 20, 'w', 's')
     self.player2 = Paddle(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_WIDTH - 10, WINDOW_HEIGHT - 50, 5, 20, 'up', 'down')
 
     self.servingPlayer = math.random(2)
     self.gameBall = Ball(WINDOW_WIDTH, WINDOW_HEIGHT, self.servingPlayer)
+
+    self.sounds = {
+        ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
+        ['score'] = love.audio.newSource('sounds/score.wav', 'static')
+    }
 
     self.gameState = 'start'
 end
@@ -39,9 +46,12 @@ function GameBoard:keyPressed(key)
         elseif self.gameState == 'serve' then
             self.gameBall:setDirection(self.servingPlayer)
             self.gameState = 'play'
-        else
-            self.gameState = 'serve'
+        elseif self.gameState == 'done' then
+            self.player1Score = 0
+            self.player2Score = 0
+            self.servingPlayer = math.random(2)
             self.gameBall:reset()
+            self.gameState = 'serve'
         end
     end
 end
@@ -53,11 +63,21 @@ function GameBoard:update(dt)
     if self.gameState == 'play' then
         if self.gameBall:collides(self.player1) or self.gameBall:collides(self.player2)  then
             self.gameBall:invertDirection()
+            self.sounds['paddle_hit']:play()
         end
         self.gameBall:update(dt) 
+        self.updateScore(self)
     end
 
-    self.updateScore(self)
+    if self.player1Score == 10 then
+        self.winingPlayer = 1
+        self.gameState = 'done'
+    elseif self.player2Score == 10 then
+        self.winingPlayer = 2
+        self.gameState = 'done'
+    end
+
+
 end
 
 function GameBoard: render()
@@ -67,8 +87,10 @@ function GameBoard: render()
 
     if self.gameState == 'start' then
         love.graphics.printf("Hello Pong!", 0, 20, self.WINDOW_WIDTH, "center")
-    else
+    elseif self.gameState == 'serve' then
         love.graphics.printf("Player " .. tostring(self.servingPlayer) .. " to serve", 0, 20, self.WINDOW_WIDTH, "center")
+    elseif self.gameState == 'done' then
+        love.graphics.printf("Player " .. tostring(self.winingPlayer) .. " wins !!!!!", 0, 20, self.WINDOW_WIDTH, "center")
     end
 
     if self.gameState == 'start' then
@@ -95,6 +117,7 @@ function GameBoard:updateScore()
         self.player2Score = self.player2Score + 1
         self.gameBall:reset()
         self.gameState = 'serve'
+        self.sounds['score']:play()
     end
 
     if self.gameBall.x > self.WINDOW_WIDTH then
@@ -102,5 +125,6 @@ function GameBoard:updateScore()
         self.player1Score = self.player1Score + 1
         self.gameBall:reset()
         self.gameState = 'serve'
+        self.sounds['score']:play()
     end
 end

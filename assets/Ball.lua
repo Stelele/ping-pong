@@ -18,6 +18,10 @@ function Ball:init(windowWidth, windowHeight, startDirection)
 
     self.Dx = startDirection == 1 and 100 or -100
     self.Dy = math.random(-50, 50) * 1.5
+
+    self.sounds = {
+        ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static')
+    }
 end
 
 function Ball:reset()
@@ -33,6 +37,7 @@ function Ball:update(dt)
 
     if self.y <= 2 or self.y >= self.WINDOW_HEIGHT - self.HEIGHT - 2 then
         self.Dy = -self.Dy
+        self.sounds['wall_hit']:play()
     end
     self.y = self.y + self.Dy * dt 
 
